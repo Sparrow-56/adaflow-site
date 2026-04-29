@@ -298,19 +298,6 @@
     .orb-hero     { width: 500px; height: 500px; top: 5%;    left: 56%;   animation: drift-a 22s ease-in-out infinite; }
     .orb-services { width: 380px; height: 380px; top: -80px; right: -80px; animation: drift-b 27s ease-in-out infinite; }
     .orb-why      { width: 440px; height: 440px; bottom: -80px; left: -60px; animation: drift-c 24s ease-in-out infinite; }
-    .hero-scan { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
-    @keyframes scan {
-      0%   { transform: translateY(-100%); opacity: 0; }
-      5%   { opacity: 1; }
-      95%  { opacity: 1; }
-      100% { transform: translateY(120vh); opacity: 0; }
-    }
-    .hero-scan::after {
-      content: ''; position: absolute; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245,197,24,0.12), rgba(245,197,24,0.28), rgba(245,197,24,0.12), transparent);
-      box-shadow: 0 0 10px rgba(245,197,24,0.12);
-      animation: scan 10s ease-in-out 2s infinite;
-    }
 
     /* MOBILE MENU */
     .mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
@@ -366,7 +353,6 @@
 <section id="hero">
   <div class="hero-glow"></div>
   <div class="hero-grid"></div>
-  <div class="hero-scan"></div>
   <div class="orb orb-hero"></div>
   <div class="hero-content">
     <div class="hero-badge">Built for local service businesses in Massachusetts</div>
