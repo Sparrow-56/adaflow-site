@@ -288,25 +288,14 @@
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     /* FLOWING MOTION ACCENTS */
-    .hero-trails { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
-    .hero-trails svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .trail-1 { stroke-dasharray: 1500; animation: trail-flow 10s ease-in-out infinite; }
-    .trail-2 { stroke-dasharray: 1200; animation: trail-flow 13s ease-in-out 3.5s infinite; }
-    .trail-3 { stroke-dasharray: 1300; animation: trail-flow 11s ease-in-out 7s infinite; }
-    @keyframes trail-flow {
-      0%   { stroke-dashoffset: 1500; opacity: 0; }
-      8%   { opacity: 0.14; }
-      85%  { opacity: 0.09; }
-      100% { stroke-dashoffset: 0; opacity: 0; }
-    }
     .orb {
       position: absolute; border-radius: 50%; pointer-events: none;
-      background: radial-gradient(circle, rgba(245,197,24,0.09) 0%, transparent 68%);
+      background: radial-gradient(circle, rgba(245,197,24,0.05) 0%, transparent 68%);
     }
     @keyframes drift-a { 0%,100% { transform: translate(0,0); } 33% { transform: translate(55px,-42px); } 66% { transform: translate(-32px,36px); } }
     @keyframes drift-b { 0%,100% { transform: translate(0,0); } 33% { transform: translate(-48px,32px); } 66% { transform: translate(44px,-44px); } }
     @keyframes drift-c { 0%,100% { transform: translate(0,0); } 50% { transform: translate(62px,44px); } }
-    .orb-hero     { width: 500px; height: 500px; top: 5%;   left: 56%;  animation: drift-a 22s ease-in-out infinite; }
+    .orb-hero     { width: 500px; height: 500px; top: 5%;    left: 56%;   animation: drift-a 22s ease-in-out infinite; }
     .orb-services { width: 380px; height: 380px; top: -80px; right: -80px; animation: drift-b 27s ease-in-out infinite; }
     .orb-why      { width: 440px; height: 440px; bottom: -80px; left: -60px; animation: drift-c 24s ease-in-out infinite; }
     .hero-scan { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
@@ -317,10 +306,10 @@
       100% { transform: translateY(120vh); opacity: 0; }
     }
     .hero-scan::after {
-      content: ''; position: absolute; left: 0; right: 0; height: 1.5px;
-      background: linear-gradient(90deg, transparent, rgba(245,197,24,0.2), rgba(245,197,24,0.5), rgba(245,197,24,0.2), transparent);
-      box-shadow: 0 0 16px rgba(245,197,24,0.22), 0 0 48px rgba(245,197,24,0.07);
-      animation: scan 8s ease-in-out 2s infinite;
+      content: ''; position: absolute; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,197,24,0.12), rgba(245,197,24,0.28), rgba(245,197,24,0.12), transparent);
+      box-shadow: 0 0 10px rgba(245,197,24,0.12);
+      animation: scan 10s ease-in-out 2s infinite;
     }
 
     /* MOBILE MENU */
@@ -377,13 +366,6 @@
 <section id="hero">
   <div class="hero-glow"></div>
   <div class="hero-grid"></div>
-  <div class="hero-trails">
-    <svg viewBox="0 0 1440 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="trail-1" d="M-60,520 C180,300 440,660 820,360 C1060,160 1260,560 1520,240" fill="none" stroke="#F5C518" stroke-width="1.5"/>
-      <path class="trail-2" d="M0,680 C240,480 500,780 920,430 C1160,190 1360,590 1660,310" fill="none" stroke="#F5C518" stroke-width="1"/>
-      <path class="trail-3" d="M160,40 C360,270 190,490 590,590 C890,670 1090,290 1500,450" fill="none" stroke="#F5C518" stroke-width="1"/>
-    </svg>
-  </div>
   <div class="hero-scan"></div>
   <div class="orb orb-hero"></div>
   <div class="hero-content">
