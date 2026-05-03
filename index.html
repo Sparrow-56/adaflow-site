@@ -706,5 +706,213 @@
     });
   }
 </script>
+
+<!-- CHAT WIDGET -->
+<style>
+  #chat-btn {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    width: 58px; height: 58px; border-radius: 50%; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #F5C518, #2649a8);
+    box-shadow: 0 4px 24px rgba(245,197,24,0.35);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  #chat-btn:hover { transform: scale(1.08); box-shadow: 0 6px 32px rgba(245,197,24,0.5); }
+  #chat-btn svg { width: 26px; height: 26px; fill: #0a0c14; }
+  #chat-btn .chat-close-icon { display: none; }
+  #chat-btn.open .chat-open-icon { display: none; }
+  #chat-btn.open .chat-close-icon { display: block; }
+
+  #chat-panel {
+    position: fixed; bottom: 100px; right: 28px; z-index: 199;
+    width: 360px; max-height: 520px;
+    background: #0f1220; border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 18px; display: flex; flex-direction: column;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.6);
+    opacity: 0; transform: translateY(16px) scale(0.97);
+    pointer-events: none; transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+  #chat-panel.open { opacity: 1; transform: none; pointer-events: all; }
+
+  #chat-header {
+    padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+  .chat-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, #F5C518, #2649a8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 800; color: #0a0c14; flex-shrink: 0;
+  }
+  .chat-header-info strong { display: block; font-size: 0.9rem; font-weight: 700; color: white; }
+  .chat-header-info span { font-size: 0.72rem; color: #22c55e; font-weight: 600; }
+  .chat-header-info span::before { content: '● '; font-size: 0.6rem; }
+
+  #chat-messages {
+    flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+    scroll-behavior: smooth;
+  }
+  #chat-messages::-webkit-scrollbar { width: 4px; }
+  #chat-messages::-webkit-scrollbar-track { background: transparent; }
+  #chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  .chat-msg { max-width: 82%; display: flex; flex-direction: column; }
+  .chat-msg.user { align-self: flex-end; align-items: flex-end; }
+  .chat-msg.ada { align-self: flex-start; align-items: flex-start; }
+  .chat-bubble {
+    padding: 10px 14px; border-radius: 14px; font-size: 0.86rem; line-height: 1.55; word-break: break-word;
+  }
+  .chat-msg.user .chat-bubble { background: #2649a8; color: white; border-bottom-right-radius: 4px; }
+  .chat-msg.ada .chat-bubble { background: rgba(255,255,255,0.06); color: #e2e8f0; border-bottom-left-radius: 4px; }
+
+  .chat-typing { display: flex; gap: 5px; align-items: center; padding: 10px 14px; }
+  .chat-typing span { width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; animation: typing-dot 1.2s infinite; }
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing-dot { 0%,60%,100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+  #chat-input-row {
+    padding: 12px; border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex; gap: 8px; flex-shrink: 0;
+  }
+  #chat-input {
+    flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 10px 14px; color: white; font-family: 'Inter', sans-serif;
+    font-size: 0.88rem; outline: none; transition: border-color 0.2s;
+  }
+  #chat-input::placeholder { color: rgba(255,255,255,0.25); }
+  #chat-input:focus { border-color: rgba(38,73,168,0.7); }
+  #chat-send {
+    width: 40px; height: 40px; border-radius: 10px; border: none; cursor: pointer;
+    background: #F5C518; color: #0a0c14; font-size: 1.1rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.15s; flex-shrink: 0;
+  }
+  #chat-send:hover { background: #f7d147; transform: scale(1.05); }
+  #chat-send:disabled { opacity: 0.4; cursor: default; transform: none; }
+  #chat-footer { padding: 6px 14px 10px; text-align: center; font-size: 0.68rem; color: rgba(255,255,255,0.2); flex-shrink: 0; }
+
+  @media (max-width: 420px) {
+    #chat-panel { width: calc(100vw - 24px); right: 12px; bottom: 90px; }
+    #chat-btn { right: 16px; bottom: 16px; }
+  }
+</style>
+
+<button id="chat-btn" aria-label="Chat with Ada">
+  <svg class="chat-open-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  <svg class="chat-close-icon" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+</button>
+
+<div id="chat-panel">
+  <div id="chat-header">
+    <div class="chat-avatar">A</div>
+    <div class="chat-header-info">
+      <strong>Ada</strong>
+      <span>Online</span>
+    </div>
+  </div>
+  <div id="chat-messages"></div>
+  <div id="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Ask me anything..." autocomplete="off" />
+    <button id="chat-send">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/></svg>
+    </button>
+  </div>
+  <div id="chat-footer">Powered by Claude · AdaFlow</div>
+</div>
+
+<script>
+(function() {
+  const WORKER_URL = 'https://adaflow-chat.adaflow.workers.dev/chat';
+  const FORMSPREE_URL = 'https://formspree.io/f/xqewjgnw';
+  const btn = document.getElementById('chat-btn');
+  const panel = document.getElementById('chat-panel');
+  const messages = document.getElementById('chat-messages');
+  const input = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
+  let history = [];
+  let opened = false;
+
+  btn.addEventListener('click', () => {
+    const isOpen = panel.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    if (isOpen && !opened) { opened = true; greet(); }
+    if (isOpen) setTimeout(() => input.focus(), 220);
+  });
+
+  function greet() {
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const greeting = "Hey! I'm Ada — I help businesses figure out where communication is breaking down and what to automate first. What kind of business do you run?";
+      appendMsg('ada', greeting);
+      history.push({ role: 'assistant', content: greeting });
+    }, 900);
+  }
+
+  function appendMsg(role, text) {
+    const wrap = document.createElement('div');
+    wrap.className = `chat-msg ${role}`;
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    messages.appendChild(wrap);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showTyping() {
+    const t = document.createElement('div');
+    t.className = 'chat-msg ada';
+    t.id = 'chat-typing';
+    t.innerHTML = '<div class="chat-bubble chat-typing"><span></span><span></span><span></span></div>';
+    messages.appendChild(t);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('chat-typing');
+    if (t) t.remove();
+  }
+
+  async function send() {
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    sendBtn.disabled = true;
+    appendMsg('user', text);
+    history.push({ role: 'user', content: text });
+    showTyping();
+
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      });
+      const data = await res.json();
+      removeTyping();
+      appendMsg('ada', data.reply);
+      history.push({ role: 'assistant', content: data.reply });
+
+      if (data.lead) {
+        fetch(FORMSPREE_URL, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: data.lead.name, email: data.lead.email, source: 'Ada chatbot' }),
+        }).catch(() => {});
+      }
+    } catch {
+      removeTyping();
+      appendMsg('ada', "Sorry, I'm having trouble connecting. Try the contact form below or email us directly.");
+    }
+    sendBtn.disabled = false;
+    input.focus();
+  }
+
+  sendBtn.addEventListener('click', send);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
+})();
+</script>
 </body>
 </html>
