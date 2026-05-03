@@ -893,12 +893,20 @@
       });
       const data = await res.json();
       removeTyping();
-      appendMsg('ada', data.reply);
-      history.push({ role: 'assistant', content: data.reply });
-      history = history.slice(-MAX_HISTORY_MESSAGES);
+      if (!res.ok) {
+        const fallback =
+          res.status === 429
+            ? "You've sent a lot of messages - give it a minute and try again."
+            : "Sorry, I'm having trouble connecting. Try the contact form below.";
+        appendMsg('ada', data.reply || fallback);
+      } else {
+        appendMsg('ada', data.reply);
+        history.push({ role: 'assistant', content: data.reply });
+        history = history.slice(-MAX_HISTORY_MESSAGES);
 
-      if (data.lead && data.lead.submitted === false) {
-        console.warn('AdaFlow chat lead captured but Formspree submission failed.');
+        if (data.lead && data.lead.submitted === false) {
+          console.warn('AdaFlow chat lead captured but Formspree submission failed.');
+        }
       }
     } catch {
       removeTyping();
