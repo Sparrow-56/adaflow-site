@@ -824,7 +824,6 @@
 <script>
 (function() {
   const WORKER_URL = 'https://adaflow-chat.adaflow.workers.dev/chat';
-  const FORMSPREE_URL = 'https://formspree.io/f/xqewjgnw';
   const btn = document.getElementById('chat-btn');
   const panel = document.getElementById('chat-panel');
   const messages = document.getElementById('chat-messages');
@@ -895,12 +894,8 @@
       appendMsg('ada', data.reply);
       history.push({ role: 'assistant', content: data.reply });
 
-      if (data.lead) {
-        fetch(FORMSPREE_URL, {
-          method: 'POST',
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(data.lead),
-        }).catch(() => {});
+      if (data.lead && data.lead.submitted === false) {
+        console.warn('AdaFlow chat lead captured but Formspree submission failed.');
       }
     } catch {
       removeTyping();
