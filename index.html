@@ -899,7 +899,7 @@
         fetch(FORMSPREE_URL, {
           method: 'POST',
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: data.lead.name, email: data.lead.email, source: 'Ada chatbot' }),
+          body: JSON.stringify(data.lead),
         }).catch(() => {});
       }
     } catch {
