@@ -792,8 +792,13 @@
   #chat-send:disabled { opacity: 0.4; cursor: default; transform: none; }
   #chat-footer { padding: 6px 14px 10px; text-align: center; font-size: 0.68rem; color: rgba(255,255,255,0.2); flex-shrink: 0; }
 
-  @media (max-width: 420px) {
-    #chat-panel { width: calc(100vw - 24px); right: 12px; bottom: 90px; }
+  @media (max-width: 480px) {
+    #chat-panel {
+      width: calc(100vw - 24px);
+      right: 12px;
+      bottom: 80px;
+      max-height: calc(100svh - 110px);
+    }
     #chat-btn { right: 16px; bottom: 16px; }
   }
 </style>
