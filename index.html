@@ -299,6 +299,31 @@
     .orb-services { width: 380px; height: 380px; top: -80px; right: -80px; animation: drift-b 27s ease-in-out infinite; }
     .orb-why      { width: 440px; height: 440px; bottom: -80px; left: -60px; animation: drift-c 24s ease-in-out infinite; }
 
+    /* WHO IT'S FOR CARDS */
+    .who-card {
+      background: var(--bg-mid); padding: 28px 32px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+    }
+    .who-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+
+    /* PROCESS FLOW ANIMATION */
+    @keyframes flow-pulse {
+      0%, 15%, 100% { background: rgba(255,255,255,0.03); border-color: var(--border); box-shadow: none; }
+      7% { background: rgba(31,58,138,0.15); border-color: rgba(31,58,138,0.5); box-shadow: 0 0 20px rgba(31,58,138,0.2); }
+    }
+    @keyframes connector-flow {
+      0%, 15%, 100% { opacity: 0.3; }
+      7% { opacity: 1; }
+    }
+    .pv-flow > div:nth-child(1) { animation: flow-pulse 5s 0s infinite; }
+    .pv-flow > div:nth-child(2) { animation: connector-flow 5s 0.6s infinite; }
+    .pv-flow > div:nth-child(3) { animation: flow-pulse 5s 1.2s infinite; }
+    .pv-flow > div:nth-child(4) { animation: connector-flow 5s 1.8s infinite; }
+    .pv-flow > div:nth-child(5) { animation: flow-pulse 5s 2.4s infinite; }
+    .pv-flow > div:nth-child(6) { animation: connector-flow 5s 3.0s infinite; }
+    .pv-flow > div:nth-child(7) { animation: flow-pulse 5s 3.6s infinite; }
+
     /* MOBILE MENU */
     .mobile-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
     .mobile-menu.open { display: flex; }
@@ -507,37 +532,37 @@
   </div>
 
   <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); border-radius: var(--radius); overflow:hidden; margin-bottom: 64px;">
-    <div style="background:var(--bg-mid); padding: 28px 32px;">
+    <div class="who-card">
       <div style="font-size:1.5rem; margin-bottom:10px;">🔧</div>
       <h4 style="font-weight:800; margin-bottom:6px;">Plumbing & HVAC</h4>
       <p style="font-size:0.88rem; color:var(--gray); line-height:1.65;">Missed calls while you're under a sink or on a roof. We capture every lead and follow up before they call the next number.</p>
     </div>
-    <div style="background:var(--bg-mid); padding: 28px 32px;">
+    <div class="who-card">
       <div style="font-size:1.5rem; margin-bottom:10px;">🌿</div>
       <h4 style="font-weight:800; margin-bottom:6px;">Landscaping & Lawn Care</h4>
       <p style="font-size:0.88rem; color:var(--gray); line-height:1.65;">Seasonal demand spikes, repeat customers, review requests — automated so you focus on the work, not the follow-up.</p>
     </div>
-    <div style="background:var(--bg-mid); padding: 28px 32px;">
+    <div class="who-card">
       <div style="font-size:1.5rem; margin-bottom:10px;">⚖️</div>
       <h4 style="font-weight:800; margin-bottom:6px;">Law Firms</h4>
       <p style="font-size:0.88rem; color:var(--gray); line-height:1.65;">Client intake, missing documents, case status updates — automated so nothing stalls and no client feels ignored.</p>
     </div>
-    <div style="background:var(--bg-mid); padding: 28px 32px;">
+    <div class="who-card">
       <div style="font-size:1.5rem; margin-bottom:10px;">🏗️</div>
       <h4 style="font-weight:800; margin-bottom:6px;">Contractors & Builders</h4>
       <p style="font-size:0.88rem; color:var(--gray); line-height:1.65;">Big jobs come from fast responses. We make sure no inquiry sits unanswered while you're on site.</p>
     </div>
-    <div style="background:var(--bg-mid); padding: 28px 32px;">
+    <div class="who-card">
       <div style="font-size:1.5rem; margin-bottom:10px;">🐾</div>
       <h4 style="font-weight:800; margin-bottom:6px;">Veterinary & Medical</h4>
       <p style="font-size:0.88rem; color:var(--gray); line-height:1.65;">After-hours inquiries, appointment follow-ups, and patient re-engagement — handled without adding front desk hours.</p>
     </div>
-    <div style="background:var(--bg-mid); padding: 28px 32px;">
+    <div class="who-card">
       <div style="font-size:1.5rem; margin-bottom:10px;">🚗</div>
       <h4 style="font-weight:800; margin-bottom:6px;">Auto & Trades</h4>
       <p style="font-size:0.88rem; color:var(--gray); line-height:1.65;">Quotes, callbacks, review requests — the stuff that falls through the cracks when you're heads-down doing the work.</p>
     </div>
-    <div style="background:var(--bg-mid); padding: 28px 32px;">
+    <div class="who-card">
       <div style="font-size:1.5rem; margin-bottom:10px;">🏢</div>
       <h4 style="font-weight:800; margin-bottom:6px;">Property Management</h4>
       <p style="font-size:0.88rem; color:var(--gray); line-height:1.65;">Automate maintenance follow-ups, tenant updates, and owner communication so nothing slips through the cracks.</p>
